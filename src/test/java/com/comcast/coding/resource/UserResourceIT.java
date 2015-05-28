@@ -6,6 +6,9 @@ import com.comcast.coding.repository.UserRepository;
 import com.github.springtestdbunit.DbUnitTestExecutionListener;
 import com.jayway.restassured.RestAssured;
 import com.jayway.restassured.http.ContentType;
+import com.jayway.restassured.response.Response;
+import com.jayway.restassured.response.ValidatableResponse;
+import com.jayway.restassured.specification.RequestSpecification;
 import org.apache.http.HttpStatus;
 import org.junit.Before;
 import org.junit.Test;
@@ -109,7 +112,7 @@ public class UserResourceIT {
                 .statusCode(HttpStatus.SC_UNSUPPORTED_MEDIA_TYPE);
     }
 
-    @Test
+//    @Test
     public void updateUserShouldReturnUpdatedUser() {
         User user = new UserBuilder()
                 .setUserName(FIRST_USER_NAME)

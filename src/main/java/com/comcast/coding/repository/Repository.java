@@ -10,7 +10,7 @@ import java.util.List;
  */
 public interface Repository<T extends Serializable> {
 
-    void delete(Long t);
+    boolean delete(Long t);
 
     T get(Long t);
 

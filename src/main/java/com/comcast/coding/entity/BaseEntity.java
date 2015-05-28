@@ -13,7 +13,7 @@ public class BaseEntity implements Serializable {
 
     @Id
     @GeneratedValue
-    protected Long id;
+    protected Long id = 0L;
 
     public Long getId() {
         return id;

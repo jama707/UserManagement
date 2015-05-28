@@ -1,12 +1,15 @@
 package com.comcast.coding.resource;
 
 import com.comcast.coding.entity.User;
+import com.comcast.coding.exception.InvalidRequestException;
+import com.comcast.coding.exception.NotFoundException;
 import com.comcast.coding.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 /**
@@ -21,7 +24,7 @@ public class UserResource {
     private UserService userService;
 
     @RequestMapping(value = "/users", method = RequestMethod.POST)
-    public ResponseEntity<Void> create(@RequestBody  User user) {
+    public ResponseEntity<Void> create(@RequestBody @Valid User user) {
         userService.save(user);
         return new ResponseEntity<Void>(HttpStatus.CREATED);
     }
@@ -29,20 +32,30 @@ public class UserResource {
 
     @RequestMapping(value = "/users/{id}", method = RequestMethod.GET)
     public ResponseEntity<User> get(@PathVariable Long id) {
-        return new ResponseEntity<User>(userService.get(id), HttpStatus.OK);
+        User user = userService.get(id);
+        if (user == null) {
+            throw new NotFoundException();
+        }
+        return new ResponseEntity<User>(user, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/users/{id}", method = RequestMethod.PUT)
-    public ResponseEntity<Void> update(@PathVariable Long id, @RequestBody  User user) {
+    public ResponseEntity<Void> update(@PathVariable Long id, @RequestBody @Valid User user) {
         user.setId(id);
-        userService.save(user);
-        return new ResponseEntity<Void>( HttpStatus.OK);
+        User save = userService.save(user);
+        if (save != null) {
+            return new ResponseEntity<Void>(HttpStatus.OK);
+        }
+        throw new InvalidRequestException();
     }
 
     @RequestMapping(value = "/users/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
-        userService.delete(id);
-        return new ResponseEntity<Void>( HttpStatus.OK);
+        boolean isDeleted = userService.delete(id);
+        if (isDeleted) {
+            return new ResponseEntity<Void>(HttpStatus.OK);
+        }
+        throw new NotFoundException();
     }
 
 

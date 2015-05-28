@@ -1,5 +1,7 @@
 package com.comcast.coding.service;
 
+import com.comcast.coding.entity.User;
+
 import java.io.Serializable;
 import java.util.List;
 
@@ -8,11 +10,11 @@ import java.util.List;
  */
 public interface Service<T extends Serializable> {
 
-    void delete(Long t);
+    boolean delete(Long t);
 
     T get(Long t);
 
-    void save(T t);
+    User save(T t);
 
     void update(T t);
 

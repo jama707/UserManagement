@@ -1,6 +1,7 @@
 package com.comcast.coding.entity;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Objects;
@@ -15,9 +16,11 @@ public class User extends BaseEntity {
 
 
     @Column(nullable = false)
+    @NotNull
     private String email;
 
     @Column(nullable = false)
+    @NotNull
     private String userName;
     //todo we can use jodatime
 

@@ -23,8 +23,8 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public void delete(Long id) {
-        userRepository.delete(id);
+    public boolean delete(Long id) {
+       return userRepository.delete(id);
     }
 
     @Override
@@ -33,9 +33,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void save(User user) {
+    public User save(User user) {
         user.setCreatedDate(Calendar.getInstance().getTime());
-        userRepository.save(user);
+        return userRepository.save(user);
     }
 
     @Override
