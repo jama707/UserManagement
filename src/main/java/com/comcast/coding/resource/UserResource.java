@@ -23,6 +23,7 @@ import java.util.List;
 //todo HATEOAS
 
 @RestController
+@RequestMapping("/api")
 public class UserResource {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(UserResource.class);
