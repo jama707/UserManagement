@@ -65,10 +65,11 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public User save(User user) {
         try {
-            if (user.getId() == null) {
+            if (user.getId() == 0) {
                 entityManager.persist(user);
                 return user;
             } else {
+                LOGGER.error("UM-APP: repo" + user);
                 return entityManager.merge(user);
             }
         } catch (Exception e) {

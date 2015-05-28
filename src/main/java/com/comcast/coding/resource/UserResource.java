@@ -4,11 +4,15 @@ import com.comcast.coding.entity.User;
 import com.comcast.coding.exception.InvalidRequestException;
 import com.comcast.coding.exception.NotFoundException;
 import com.comcast.coding.service.UserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.WebApplicationContext;
 
+import javax.annotation.Resource;
 import javax.validation.Valid;
 import java.util.List;
 
@@ -20,13 +24,17 @@ import java.util.List;
 
 @RestController
 public class UserResource {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(UserResource.class);
+
+
     @Autowired
     private UserService userService;
 
     @RequestMapping(value = "/users", method = RequestMethod.POST)
-    public ResponseEntity<Void> create(@RequestBody @Valid User user) {
+    public ResponseEntity create(@RequestBody @Valid User user) {
         userService.save(user);
-        return new ResponseEntity<Void>(HttpStatus.CREATED);
+        return new ResponseEntity(HttpStatus.CREATED);
     }
 
 
@@ -34,28 +42,29 @@ public class UserResource {
     public ResponseEntity<User> get(@PathVariable Long id) {
         User user = userService.get(id);
         if (user == null) {
-            throw new NotFoundException();
+            return new ResponseEntity<User>(HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<User>(user, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/users/{id}", method = RequestMethod.PUT)
-    public ResponseEntity<Void> update(@PathVariable Long id, @RequestBody @Valid User user) {
+    public ResponseEntity update(@PathVariable Long id, @RequestBody @Valid User user) {
         user.setId(id);
         User save = userService.save(user);
+        LOGGER.error("UM-APP" + save);
         if (save != null) {
-            return new ResponseEntity<Void>(HttpStatus.OK);
+            return new ResponseEntity(HttpStatus.OK);
         }
-        throw new InvalidRequestException();
+        return new ResponseEntity(HttpStatus.BAD_REQUEST);
     }
 
     @RequestMapping(value = "/users/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id) {
+    public ResponseEntity delete(@PathVariable Long id) {
         boolean isDeleted = userService.delete(id);
         if (isDeleted) {
-            return new ResponseEntity<Void>(HttpStatus.OK);
+            return new ResponseEntity(HttpStatus.NO_CONTENT);
         }
-        throw new NotFoundException();
+        return new ResponseEntity(HttpStatus.NOT_FOUND);
     }
 
 
