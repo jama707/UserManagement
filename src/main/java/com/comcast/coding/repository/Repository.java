@@ -1,5 +1,7 @@
 package com.comcast.coding.repository;
 
+import com.comcast.coding.entity.User;
+
 import java.io.Serializable;
 import java.util.List;
 
@@ -12,8 +14,9 @@ public interface Repository<T extends Serializable> {
 
     T get(Long t);
 
-    void save(T t);
+    User save(T t);
 
     List<T> paging(int page, int limit);
 
+    void deleteAll();
 }

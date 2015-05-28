@@ -55,10 +55,7 @@ public class User extends BaseEntity {
 
         User user = (User) o;
 
-        if (!Objects.equals(id, user.id)) return false;
-        if (!userName.equals(user.userName)) return false;
-        return email.equals(user.email);
-
+        return Objects.equals(id, user.id);
     }
 
     @Override

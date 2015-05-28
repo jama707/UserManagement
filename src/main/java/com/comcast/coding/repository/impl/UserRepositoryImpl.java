@@ -6,6 +6,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import java.util.List;
 
@@ -37,12 +38,13 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public void save(User user) {
+    public User save(User user) {
         if (user.getId() == null) {
             entityManager.persist(user);
         } else {
             entityManager.merge(user);
         }
+        return user;
     }
 
 
@@ -52,5 +54,12 @@ public class UserRepositoryImpl implements UserRepository {
         query.setFirstResult((page - 1) * limit);
         query.setMaxResults(limit);
         return query.getResultList();
+    }
+
+    @Override
+    public void deleteAll() {
+        Query query = entityManager.createQuery("DELETE FROM User");
+        query.executeUpdate();
+
     }
 }
